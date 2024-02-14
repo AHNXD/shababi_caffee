@@ -142,7 +142,7 @@ class _SettingsState extends State<Settings> {
             ),
             Divider(thickness: 5, color: appColor),
             const Image(
-              image: AssetImage('assets/icons/icon.png'),
+              image: AssetImage('assets/images/logo.png'),
               height: 200,
               width: 200,
             )
