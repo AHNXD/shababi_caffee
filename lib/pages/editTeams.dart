@@ -35,103 +35,115 @@ class _EditTeamsPageState extends State<EditTeamsPage> {
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
         ),
-        body: Center(
-          child: FutureBuilder(
-              future: ApiService.getTeams(),
-              builder: (BuildContext context, AsyncSnapshot snapshot) {
-                if (snapshot.hasData) {
-                  var teams = snapshot.data;
-                  if (teams['status'] == "success") {
-                    teams = teams['teams'];
-                    return ListView.builder(
-                        itemCount: teams.length,
-                        itemBuilder: (BuildContext BuildContext, int index) {
-                          return Container(
-                            decoration: BoxDecoration(
-                              color: toColor(teams[index]['color']),
-                              borderRadius: const BorderRadius.only(
-                                topLeft: Radius.circular(20),
-                                bottomRight: Radius.circular(20),
-                              ),
-                            ),
-                            width: double.infinity,
-                            padding: const EdgeInsets.all(16),
-                            margin: const EdgeInsets.all(16),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  "${teams[index]['name']}",
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white,
-                                      fontSize: 30),
-                                ),
-                                Text(
-                                  "${teams[index]['points']}",
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white,
-                                      fontSize: 25),
-                                ),
-                                Container(
-                                  decoration: const BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(10)),
+        body: DecoratedBox(
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+              opacity: 0.4,
+              image: AssetImage("assets/images/logo.png"),
+            ),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Center(
+              child: FutureBuilder(
+                  future: ApiService.getTeams(),
+                  builder: (BuildContext context, AsyncSnapshot snapshot) {
+                    if (snapshot.hasData) {
+                      var teams = snapshot.data;
+                      if (teams['status'] == "success") {
+                        teams = teams['teams'];
+                        return ListView.builder(
+                            itemCount: teams.length,
+                            itemBuilder:
+                                (BuildContext BuildContext, int index) {
+                              return Container(
+                                decoration: BoxDecoration(
+                                  color: toColor(teams[index]['color']),
+                                  borderRadius: const BorderRadius.only(
+                                    topLeft: Radius.circular(20),
+                                    bottomRight: Radius.circular(20),
                                   ),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
-                                    children: [
-                                      IconButton(
-                                          onPressed: () async {
-                                            await ApiService.editTeam(
-                                                teams[index]['ID'],
-                                                selectedValue,
-                                                'add');
-                                            setState(() {});
-                                          },
-                                          icon: const Icon(
-                                            Icons.add,
-                                            size: 30,
-                                          )),
-                                      DropdownButton<int>(
-                                        value: selectedValue,
-                                        items: menuItems,
-                                        onChanged: (int? newValue) {
-                                          setState(() {
-                                            selectedValue = newValue!;
-                                          });
-                                        },
+                                ),
+                                width: double.infinity,
+                                padding: const EdgeInsets.all(16),
+                                margin: const EdgeInsets.all(16),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      "${teams[index]['name']}",
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white,
+                                          fontSize: 30),
+                                    ),
+                                    Text(
+                                      "${teams[index]['points']}",
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white,
+                                          fontSize: 25),
+                                    ),
+                                    Container(
+                                      decoration: const BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(10)),
                                       ),
-                                      IconButton(
-                                          onPressed: () async {
-                                            await ApiService.editTeam(
-                                                teams[index]['ID'],
-                                                selectedValue,
-                                                'sub');
-                                            setState(() {});
-                                          },
-                                          icon: const Icon(
-                                            Icons.remove,
-                                            size: 30,
-                                          )),
-                                    ],
-                                  ),
-                                )
-                              ],
-                            ),
-                          );
-                        });
-                  }
-                  return const Text("أعـد الـمـحـاولـة");
-                } else {
-                  return CircularProgressIndicator(
-                    color: appColor,
-                  );
-                }
-              }),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceEvenly,
+                                        children: [
+                                          IconButton(
+                                              onPressed: () async {
+                                                await ApiService.editTeam(
+                                                    teams[index]['ID'],
+                                                    selectedValue,
+                                                    'add');
+                                                setState(() {});
+                                              },
+                                              icon: const Icon(
+                                                Icons.add,
+                                                size: 30,
+                                              )),
+                                          DropdownButton<int>(
+                                            value: selectedValue,
+                                            items: menuItems,
+                                            onChanged: (int? newValue) {
+                                              setState(() {
+                                                selectedValue = newValue!;
+                                              });
+                                            },
+                                          ),
+                                          IconButton(
+                                              onPressed: () async {
+                                                await ApiService.editTeam(
+                                                    teams[index]['ID'],
+                                                    selectedValue,
+                                                    'sub');
+                                                setState(() {});
+                                              },
+                                              icon: const Icon(
+                                                Icons.remove,
+                                                size: 30,
+                                              )),
+                                        ],
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              );
+                            });
+                      }
+                      return const Text("أعـد الـمـحـاولـة");
+                    } else {
+                      return CircularProgressIndicator(
+                        color: appColor,
+                      );
+                    }
+                  }),
+            ),
+          ),
         ),
       ),
     );

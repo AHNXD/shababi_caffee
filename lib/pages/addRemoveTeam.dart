@@ -181,68 +181,79 @@ class _AddRemoveTeamState extends State<AddRemoveTeam> {
                         ),
                       ));
             }),
-        body: FutureBuilder(
-          future: ApiService.getTeams(),
-          builder: (BuildContext context, AsyncSnapshot snapshot) {
-            if (snapshot.hasData) {
-              var teams = snapshot.data;
-              if (teams['status'] == "success") {
-                teams = teams['teams'];
-                return ListView.builder(
-                    itemCount: teams.length,
-                    itemBuilder: (BuildContext BuildContext, int index) {
-                      return Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Container(
-                            padding: const EdgeInsets.all(16),
-                            height: 100,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(60),
-                                border: Border.all(
-                                    color: toColor(teams[index]['color']),
-                                    width: 5)),
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      teams[index]['name'],
-                                      style: const TextStyle(
-                                          fontSize: 25,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    Text(
-                                      teams[index]['points'],
-                                      style: const TextStyle(
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    IconButton(
-                                        onPressed: () async {
-                                          await ApiService.deleteTeam(
-                                              teams[index]['ID']);
-                                          setState(() {});
-                                        },
-                                        icon: const Icon(
-                                          Icons.delete,
-                                          color: Colors.red,
-                                        ))
-                                  ]),
-                            )),
-                      );
-                    });
-              } else {
-                return const Text("أعـد الـمـحـاولـة");
-              }
-            } else {
-              return Center(
-                child: CircularProgressIndicator(
-                  color: appColor,
-                ),
-              );
-            }
-          },
+        body: DecoratedBox(
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+              opacity: 0.4,
+              image: AssetImage("assets/images/logo.png"),
+            ),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: FutureBuilder(
+              future: ApiService.getTeams(),
+              builder: (BuildContext context, AsyncSnapshot snapshot) {
+                if (snapshot.hasData) {
+                  var teams = snapshot.data;
+                  if (teams['status'] == "success") {
+                    teams = teams['teams'];
+                    return ListView.builder(
+                        itemCount: teams.length,
+                        itemBuilder: (BuildContext BuildContext, int index) {
+                          return Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Container(
+                                padding: const EdgeInsets.all(16),
+                                height: 100,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(60),
+                                    border: Border.all(
+                                        color: toColor(teams[index]['color']),
+                                        width: 5)),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          teams[index]['name'],
+                                          style: const TextStyle(
+                                              fontSize: 25,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        Text(
+                                          teams[index]['points'],
+                                          style: const TextStyle(
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        IconButton(
+                                            onPressed: () async {
+                                              await ApiService.deleteTeam(
+                                                  teams[index]['ID']);
+                                              setState(() {});
+                                            },
+                                            icon: const Icon(
+                                              Icons.delete,
+                                              color: Colors.red,
+                                            ))
+                                      ]),
+                                )),
+                          );
+                        });
+                  } else {
+                    return const Text("أعـد الـمـحـاولـة");
+                  }
+                } else {
+                  return Center(
+                    child: CircularProgressIndicator(
+                      color: appColor,
+                    ),
+                  );
+                }
+              },
+            ),
+          ),
         ),
       ),
     );
