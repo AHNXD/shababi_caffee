@@ -13,6 +13,12 @@ class ApiService {
     return json.decode(response.body);
   }
 
+  static Future checkConn() async {
+    final result = Uri.parse("$ip/api/checkConn.php");
+    final response = await http.get(result);
+    return json.decode(response.body);
+  }
+
   static Future editTeam(var id, var ammount, var op) async {
     final result =
         Uri.parse("$ip/api/editTeam.php?ID=$id&ammount=$ammount&op=$op");

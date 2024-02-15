@@ -19,6 +19,9 @@ class _SettingsState extends State<Settings> {
   void initState() {
     super.initState();
     _retrieveIp();
+    setState(() {
+      _controller.text = ApiService.ip;
+    });
   }
 
   void massege(String error, Color c) {

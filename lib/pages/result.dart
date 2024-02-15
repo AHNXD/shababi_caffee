@@ -50,32 +50,35 @@ class _ResultPageState extends State<ResultPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: appColor,
-        centerTitle: true,
-        title: const Text(
-          "الـنـتـائـج",
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
-      ),
-      body: DecoratedBox(
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            opacity: 0.4,
-            image: AssetImage("assets/images/logo.png"),
+    return Directionality(
+      textDirection: TextDirection.rtl,
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: appColor,
+          centerTitle: true,
+          title: const Text(
+            "الـنـتـائـج",
+            style: TextStyle(fontWeight: FontWeight.bold),
           ),
         ),
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Center(
-            child: _dataPoints.isNotEmpty
-                ? HistogramChart(
-                    data: _dataPoints,
-                  )
-                : CircularProgressIndicator(
-                    color: appColor,
-                  ),
+        body: DecoratedBox(
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+              opacity: 0.4,
+              image: AssetImage("assets/images/logo.png"),
+            ),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Center(
+              child: _dataPoints.isNotEmpty
+                  ? HistogramChart(
+                      data: _dataPoints,
+                    )
+                  : CircularProgressIndicator(
+                      color: appColor,
+                    ),
+            ),
           ),
         ),
       ),

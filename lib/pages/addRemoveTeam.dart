@@ -200,46 +200,43 @@ class _AddRemoveTeamState extends State<AddRemoveTeam> {
                     return ListView.builder(
                         itemCount: teams.length,
                         itemBuilder: (BuildContext BuildContext, int index) {
-                          return Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Container(
-                                padding: const EdgeInsets.all(16),
-                                height: 100,
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(60),
-                                    border: Border.all(
-                                        color: toColor(teams[index]['color']),
-                                        width: 5)),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(
-                                          teams[index]['name'],
-                                          style: const TextStyle(
-                                              fontSize: 25,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                        Text(
-                                          teams[index]['points'],
-                                          style: const TextStyle(
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                        IconButton(
-                                            onPressed: () async {
-                                              await ApiService.deleteTeam(
-                                                  teams[index]['ID']);
-                                              setState(() {});
-                                            },
-                                            icon: const Icon(
-                                              Icons.delete,
-                                              color: Colors.red,
-                                            ))
-                                      ]),
-                                )),
-                          );
+                          return Container(
+                              margin: const EdgeInsets.all(8),
+                              padding: const EdgeInsets.all(16),
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(60),
+                                  border: Border.all(
+                                      color: toColor(teams[index]['color']),
+                                      width: 5)),
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        teams[index]['name'],
+                                        style: const TextStyle(
+                                            fontSize: 25,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      Text(
+                                        teams[index]['points'],
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      IconButton(
+                                          onPressed: () async {
+                                            await ApiService.deleteTeam(
+                                                teams[index]['ID']);
+                                            setState(() {});
+                                          },
+                                          icon: const Icon(
+                                            Icons.delete,
+                                            color: Colors.red,
+                                          ))
+                                    ]),
+                              ));
                         });
                   } else {
                     return const Text("أعـد الـمـحـاولـة");
