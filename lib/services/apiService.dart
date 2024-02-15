@@ -5,7 +5,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class ApiService {
-  static var ip = "http://192.168.1.2/shababi_caffee";
+  static var ip = "http://192.168.1.2/shababi_caffee_web";
 
   static Future getTeams() async {
     final result = Uri.parse("$ip/api/getTeams.php");
