@@ -43,6 +43,7 @@ class _CamScannerState extends State<CamScanner> {
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
+        resizeToAvoidBottomInset: Platform.isAndroid ? false : true,
         appBar: AppBar(
           backgroundColor: appColor,
           title: const Text(

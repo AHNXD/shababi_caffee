@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:shababi_caffee/const.dart';
 import 'package:shababi_caffee/services/apiService.dart';
@@ -53,6 +54,7 @@ class _ResultPageState extends State<ResultPage> {
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
+        resizeToAvoidBottomInset: Platform.isAndroid ? false : true,
         appBar: AppBar(
           backgroundColor: appColor,
           centerTitle: true,
