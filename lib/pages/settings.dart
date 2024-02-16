@@ -92,9 +92,8 @@ class _SettingsState extends State<Settings> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(left: 10, right: 10),
+                  padding: const EdgeInsets.all(16),
                   child: TextFormField(
-                    maxLength: 50,
                     controller: _controller,
                     decoration: InputDecoration(
                       labelStyle: TextStyle(color: appColor),
