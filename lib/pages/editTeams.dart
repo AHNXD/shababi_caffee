@@ -29,7 +29,8 @@ class _EditTeamsPageState extends State<EditTeamsPage> {
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
-        resizeToAvoidBottomInset: Platform.isAndroid ? false : true,
+        resizeToAvoidBottomInset:
+            Platform.isAndroid || Platform.isIOS ? false : true,
         appBar: AppBar(
           backgroundColor: appColor,
           centerTitle: true,

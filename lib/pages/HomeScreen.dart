@@ -30,7 +30,8 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        resizeToAvoidBottomInset: Platform.isAndroid ? false : true,
+        resizeToAvoidBottomInset:
+            Platform.isAndroid || Platform.isIOS ? false : true,
         appBar: AppBar(
           actions: [
             IconButton(

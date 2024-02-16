@@ -63,7 +63,8 @@ class _SettingsState extends State<Settings> {
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
-        resizeToAvoidBottomInset: Platform.isAndroid ? false : true,
+        resizeToAvoidBottomInset:
+            Platform.isAndroid || Platform.isIOS ? false : true,
         appBar: AppBar(
           backgroundColor: appColor,
           title: const Text(

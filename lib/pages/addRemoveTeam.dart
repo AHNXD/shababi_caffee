@@ -33,11 +33,14 @@ class _AddRemoveTeamState extends State<AddRemoveTeam> {
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
-        resizeToAvoidBottomInset: Platform.isAndroid ? false : true,
-        bottomNavigationBar: BottomAppBar(
-          color: appColor,
-          height: 32,
-        ),
+        resizeToAvoidBottomInset:
+            Platform.isAndroid || Platform.isIOS ? false : true,
+        bottomNavigationBar: Platform.isAndroid || Platform.isIOS
+            ? BottomAppBar(
+                color: appColor,
+                height: 32,
+              )
+            : null,
         appBar: AppBar(
           backgroundColor: appColor,
           centerTitle: true,
@@ -48,10 +51,13 @@ class _AddRemoveTeamState extends State<AddRemoveTeam> {
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         floatingActionButton: FloatingActionButton(
-            backgroundColor: Colors.white,
+            backgroundColor:
+                Platform.isAndroid || Platform.isIOS ? Colors.white : appColor,
             child: Icon(
               Icons.add,
-              color: appColor,
+              color: Platform.isAndroid || Platform.isIOS
+                  ? appColor
+                  : Colors.white,
               size: 32,
             ),
             onPressed: () {
@@ -225,7 +231,8 @@ class _AddRemoveTeamState extends State<AddRemoveTeam> {
                                       Text(
                                         teams[index]['points'],
                                         style: const TextStyle(
-                                            fontWeight: FontWeight.bold),
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 20),
                                       ),
                                       IconButton(
                                           onPressed: () async {
