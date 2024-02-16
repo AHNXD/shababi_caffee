@@ -1,5 +1,7 @@
 // ignore_for_file: file_names, non_constant_identifier_names, use_build_context_synchronously
 
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:shababi_caffee/const.dart';
 import 'package:shababi_caffee/pages/addRemoveTeam.dart';
@@ -28,6 +30,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        resizeToAvoidBottomInset: Platform.isAndroid ? false : true,
         appBar: AppBar(
           actions: [
             IconButton(

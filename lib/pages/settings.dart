@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:shababi_caffee/const.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -61,6 +63,7 @@ class _SettingsState extends State<Settings> {
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
+        resizeToAvoidBottomInset: Platform.isAndroid ? false : true,
         appBar: AppBar(
           backgroundColor: appColor,
           title: const Text(

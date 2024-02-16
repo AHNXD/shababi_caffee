@@ -1,5 +1,7 @@
 // ignore_for_file: file_names, non_constant_identifier_names
 
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:shababi_caffee/const.dart';
 import 'package:shababi_caffee/services/apiService.dart';
@@ -27,6 +29,7 @@ class _EditTeamsPageState extends State<EditTeamsPage> {
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
+        resizeToAvoidBottomInset: Platform.isAndroid ? false : true,
         appBar: AppBar(
           backgroundColor: appColor,
           centerTitle: true,
