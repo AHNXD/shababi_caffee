@@ -17,12 +17,14 @@ class Settings extends StatefulWidget {
 
 class _SettingsState extends State<Settings> {
   static final TextEditingController _controller = TextEditingController();
+  static final TextEditingController _controllerTime = TextEditingController();
   @override
   void initState() {
     super.initState();
     _retrieveIp();
     setState(() {
       _controller.text = ApiService.ip;
+      _controllerTime.text = time.toString();
     });
   }
 
@@ -161,7 +163,40 @@ class _SettingsState extends State<Settings> {
                       ),
                     ),
                   ],
-                )
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: TextFormField(
+                    keyboardType: TextInputType.number,
+                    controller: _controllerTime,
+                    decoration: InputDecoration(
+                      labelStyle: TextStyle(color: appColor),
+                      labelText: "الـوقـت",
+                      hintText: "ادخـل الـوقـت",
+                      prefixIcon: const Icon(
+                        Icons.numbers,
+                        color: Colors.amber,
+                      ),
+                      suffixIcon: IconButton(
+                          onPressed: () async {
+                            time = int.parse(_controllerTime.text);
+                            setState(() {});
+                          },
+                          icon: Icon(
+                            Icons.save,
+                            color: appColor,
+                          )),
+                      fillColor: appColor,
+                      enabledBorder: OutlineInputBorder(
+                          borderSide:
+                              const BorderSide(color: Colors.black, width: 2),
+                          borderRadius: BorderRadius.circular(25)),
+                      focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: appColor, width: 2),
+                          borderRadius: BorderRadius.circular(25)),
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
