@@ -164,39 +164,40 @@ class _SettingsState extends State<Settings> {
                     ),
                   ],
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: TextFormField(
-                    keyboardType: TextInputType.number,
-                    controller: _controllerTime,
-                    decoration: InputDecoration(
-                      labelStyle: TextStyle(color: appColor),
-                      labelText: "الـوقـت",
-                      hintText: "ادخـل الـوقـت",
-                      prefixIcon: const Icon(
-                        Icons.numbers,
-                        color: Colors.amber,
+                if (Platform.isWindows)
+                  Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: TextFormField(
+                      keyboardType: TextInputType.number,
+                      controller: _controllerTime,
+                      decoration: InputDecoration(
+                        labelStyle: TextStyle(color: appColor),
+                        labelText: "الـوقـت",
+                        hintText: "ادخـل الـوقـت",
+                        prefixIcon: const Icon(
+                          Icons.numbers,
+                          color: Colors.amber,
+                        ),
+                        suffixIcon: IconButton(
+                            onPressed: () async {
+                              time = int.parse(_controllerTime.text);
+                              setState(() {});
+                            },
+                            icon: Icon(
+                              Icons.save,
+                              color: appColor,
+                            )),
+                        fillColor: appColor,
+                        enabledBorder: OutlineInputBorder(
+                            borderSide:
+                                const BorderSide(color: Colors.black, width: 2),
+                            borderRadius: BorderRadius.circular(25)),
+                        focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: appColor, width: 2),
+                            borderRadius: BorderRadius.circular(25)),
                       ),
-                      suffixIcon: IconButton(
-                          onPressed: () async {
-                            time = int.parse(_controllerTime.text);
-                            setState(() {});
-                          },
-                          icon: Icon(
-                            Icons.save,
-                            color: appColor,
-                          )),
-                      fillColor: appColor,
-                      enabledBorder: OutlineInputBorder(
-                          borderSide:
-                              const BorderSide(color: Colors.black, width: 2),
-                          borderRadius: BorderRadius.circular(25)),
-                      focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: appColor, width: 2),
-                          borderRadius: BorderRadius.circular(25)),
                     ),
                   ),
-                ),
               ],
             ),
           ),

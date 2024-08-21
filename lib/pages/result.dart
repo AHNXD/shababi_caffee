@@ -25,7 +25,7 @@ class _ResultPageState extends State<ResultPage> {
   bool _isTimerRunning = false;
 
   // Audio player instance
-  String audioasset = "audio/10s.mp3";
+  String audioasset = "";
 
   late AudioPlayer _audioPlayer;
 
@@ -88,7 +88,12 @@ class _ResultPageState extends State<ResultPage> {
             setState(() {
               _timerDuration--;
             });
+            if (_timerDuration == 60) {
+              audioasset = "audio/1min.mp3";
+              _playBeep();
+            }
             if (_timerDuration == 10) {
+              audioasset = "audio/10s.mp3";
               _playBeep();
             }
           } else {

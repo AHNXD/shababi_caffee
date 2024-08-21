@@ -93,6 +93,7 @@ class _EditTeamsPageState extends State<EditTeamsPage> {
                                           fontSize: 25),
                                     ),
                                     Container(
+                                      height: 48,
                                       decoration: const BoxDecoration(
                                         color: Colors.white,
                                         borderRadius: BorderRadius.all(
@@ -117,6 +118,12 @@ class _EditTeamsPageState extends State<EditTeamsPage> {
                                                     fontWeight: FontWeight.bold,
                                                     fontSize: 25),
                                               )),
+                                          const SizedBox(
+                                            height: 32,
+                                            child: VerticalDivider(
+                                              thickness: 3,
+                                            ),
+                                          ),
                                           TextButton(
                                               onPressed: () async {
                                                 await ApiService.editTeam(
@@ -132,6 +139,12 @@ class _EditTeamsPageState extends State<EditTeamsPage> {
                                                     fontWeight: FontWeight.bold,
                                                     fontSize: 25),
                                               )),
+                                          const SizedBox(
+                                            height: 32,
+                                            child: VerticalDivider(
+                                              thickness: 3,
+                                            ),
+                                          ),
                                           TextButton(
                                               onPressed: () async {
                                                 await ApiService.editTeam(
@@ -147,6 +160,12 @@ class _EditTeamsPageState extends State<EditTeamsPage> {
                                                     fontWeight: FontWeight.bold,
                                                     fontSize: 25),
                                               )),
+                                          const SizedBox(
+                                            height: 32,
+                                            child: VerticalDivider(
+                                              thickness: 3,
+                                            ),
+                                          ),
                                           TextButton(
                                               onPressed: () async {
                                                 await ApiService.editTeam(
@@ -166,9 +185,10 @@ class _EditTeamsPageState extends State<EditTeamsPage> {
                                       ),
                                     ),
                                     const SizedBox(
-                                      height: 16,
+                                      height: 24,
                                     ),
                                     Container(
+                                      height: 48,
                                       decoration: const BoxDecoration(
                                         color: Colors.white,
                                         borderRadius: BorderRadius.all(
@@ -193,6 +213,12 @@ class _EditTeamsPageState extends State<EditTeamsPage> {
                                                     fontWeight: FontWeight.bold,
                                                     fontSize: 25),
                                               )),
+                                          const SizedBox(
+                                            height: 32,
+                                            child: VerticalDivider(
+                                              thickness: 3,
+                                            ),
+                                          ),
                                           TextButton(
                                               onPressed: () async {
                                                 await ApiService.editTeam(
@@ -208,6 +234,12 @@ class _EditTeamsPageState extends State<EditTeamsPage> {
                                                     fontWeight: FontWeight.bold,
                                                     fontSize: 25),
                                               )),
+                                          const SizedBox(
+                                            height: 32,
+                                            child: VerticalDivider(
+                                              thickness: 3,
+                                            ),
+                                          ),
                                           TextButton(
                                               onPressed: () async {
                                                 await ApiService.editTeam(
@@ -223,6 +255,12 @@ class _EditTeamsPageState extends State<EditTeamsPage> {
                                                     fontWeight: FontWeight.bold,
                                                     fontSize: 25),
                                               )),
+                                          const SizedBox(
+                                            height: 32,
+                                            child: VerticalDivider(
+                                              thickness: 3,
+                                            ),
+                                          ),
                                           TextButton(
                                               onPressed: () async {
                                                 await ApiService.editTeam(
