@@ -1,14 +1,9 @@
-// ignore_for_file: file_names, non_constant_identifier_names, use_build_context_synchronously
-
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:shababi_caffee/const.dart';
 import 'package:shababi_caffee/pages/addRemoveTeam.dart';
 import 'package:shababi_caffee/pages/editTeams.dart';
 import 'package:shababi_caffee/pages/result.dart';
 import 'package:shababi_caffee/pages/settings.dart';
-import 'package:shababi_caffee/services/apiService.dart';
 
 class HomeScreen extends StatefulWidget {
   static String id = "/Home";
@@ -19,128 +14,253 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  void massege(String error, Color c) {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      backgroundColor: c,
-      content: Center(child: Text(error)),
-      duration: const Duration(seconds: 2),
-    ));
+  @override
+  Widget build(BuildContext context) {
+    // Determine screen width for responsive layout
+
+    return Directionality(
+      textDirection: TextDirection.rtl, // Ensure RTL for Arabic
+      child: Scaffold(
+        backgroundColor: Colors.grey[100],
+        resizeToAvoidBottomInset: false,
+
+        // Custom Transparent AppBar to show the background header
+        extendBodyBehindAppBar: true,
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          actions: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: CircleAvatar(
+                backgroundColor: Colors.white.withOpacity(0.2),
+                child: IconButton(
+                  onPressed: () => Navigator.pushNamed(context, Settings.id),
+                  icon: const Icon(Icons.settings, color: Colors.white),
+                ),
+              ),
+            )
+          ],
+        ),
+
+        body: Column(
+          children: [
+            // --- 1. Custom Curved Header with Logo ---
+            Expanded(
+              flex: 3,
+              child: Stack(
+                children: [
+                  ClipPath(
+                    clipper: HeaderClipper(),
+                    child: Container(
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                          colors: [
+                            appColor,
+                            const Color(0xFF1565C0), // Darker Blue
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  Center(
+                    child: Padding(
+                      padding: const EdgeInsets.only(bottom: 20.0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const SizedBox(height: 30), // Spacing for AppBar
+                          Hero(
+                            tag: 'logo',
+                            child: Image.asset(
+                              "assets/images/logo_robo.png",
+                              height: 180,
+                              fit: BoxFit.contain,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            // --- 2. Menu Buttons Section ---
+            Expanded(
+              flex: 4,
+              child: Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
+                child: Column(
+                  children: [
+                    // A. Big "Results" Card
+                    _buildMenuCard(
+                      context,
+                      title: "الـنـتـائـج الـمـبـاشـرة",
+                      icon: Icons.bar_chart_rounded,
+                      color: Colors.orangeAccent,
+                      onClick: () =>
+                          Navigator.pushNamed(context, ResultPage.id),
+                      isWide: true,
+                    ),
+
+                    const SizedBox(height: 16),
+
+                    // B. Admin Tools Grid
+                    Expanded(
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: _buildMenuCard(
+                              context,
+                              title: "تـعـديـل النقاط",
+                              icon: Icons.edit_note_rounded,
+                              color: Colors.blueAccent,
+                              onClick: () => Navigator.pushNamed(
+                                  context, EditTeamsPage.id),
+                            ),
+                          ),
+                          const SizedBox(width: 16),
+                          Expanded(
+                            child: _buildMenuCard(
+                              context,
+                              title: "إدارة الـفـرق",
+                              icon: Icons.groups_2_rounded, // or group_add
+                              color: Colors.green,
+                              onClick: () => Navigator.pushNamed(
+                                  context, AddRemoveTeam.id),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 30),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildMenuCard(
+    BuildContext context, {
+    required String title,
+    required IconData icon,
+    required Color color,
+    required VoidCallback onClick,
+    bool isWide = false,
+  }) {
+    return Container(
+      width: double.infinity,
+      height: isWide
+          ? 100
+          : double.infinity, // Fixed height for wide card, expand for grid
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.15),
+            spreadRadius: 2,
+            blurRadius: 10,
+            offset: const Offset(0, 5),
+          ),
+        ],
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: onClick,
+          borderRadius: BorderRadius.circular(20),
+          splashColor: color.withOpacity(0.1),
+          highlightColor: color.withOpacity(0.05),
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: isWide
+                ? Row(
+                    // Row layout for the wide card
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          color: color.withOpacity(0.1),
+                          shape: BoxShape.circle,
+                        ),
+                        child: Icon(icon, color: color, size: 32),
+                      ),
+                      const SizedBox(width: 20),
+                      Text(
+                        title,
+                        style: const TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black87,
+                        ),
+                      ),
+                      const Spacer(),
+                      Icon(Icons.arrow_forward_ios_rounded,
+                          color: Colors.grey[400], size: 20),
+                    ],
+                  )
+                : Column(
+                    // Column layout for grid cards
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: color.withOpacity(0.1),
+                          shape: BoxShape.circle,
+                        ),
+                        child: Icon(icon, color: color, size: 40),
+                      ),
+                      const SizedBox(height: 16),
+                      Text(
+                        title,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black87,
+                        ),
+                      ),
+                    ],
+                  ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// --- Custom Clipper for the curved header ---
+class HeaderClipper extends CustomClipper<Path> {
+  @override
+  Path getClip(Size size) {
+    Path path = Path();
+    path.lineTo(0, size.height - 50); // Start at bottom-left, slightly up
+
+    // Create a quadratic bezier curve
+    path.quadraticBezierTo(
+        size.width / 2, // Control point x (middle)
+        size.height, // Control point y (bottom)
+        size.width, // End point x (right)
+        size.height - 50 // End point y (slightly up)
+        );
+
+    path.lineTo(size.width, 0); // Line to top-right
+    path.close();
+    return path;
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        resizeToAvoidBottomInset:
-            Platform.isAndroid || Platform.isIOS ? false : true,
-        appBar: AppBar(
-          actions: [
-            IconButton(
-                onPressed: () {
-                  Navigator.pushNamed(context, Settings.id);
-                },
-                icon: const Icon(Icons.settings))
-          ],
-          backgroundColor: appColor,
-          centerTitle: true,
-          title: const Text(
-            "الـصـفـحـة الـرئـيـسـيـة",
-            style: TextStyle(fontWeight: FontWeight.bold),
-          ),
-        ),
-        body: Center(
-          child: Column(
-            children: [
-              Container(
-                padding: const EdgeInsets.only(bottom: 16),
-                height: 250,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                    color: appColor,
-                    borderRadius: const BorderRadius.only(
-                        bottomLeft: Radius.circular(60),
-                        bottomRight: Radius.circular(60))),
-                child: Image.asset("assets/images/logo.png"),
-              ),
-              const Spacer(
-                flex: 1,
-              ),
-              Container(
-                width: MediaQuery.of(context).size.width / 2,
-                height: 80,
-                padding: const EdgeInsets.all(8.0),
-                child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(backgroundColor: appColor),
-                    onPressed: () async {
-                      try {
-                        var result = await ApiService.checkConn();
-                        if (result['status'] == "success") {
-                          Navigator.pushNamed(context, ResultPage.id);
-                        } else {
-                          massege("حـدث خـطـأ بـالإتـصـال", Colors.red);
-                        }
-                      } catch (e) {
-                        massege("الـرجـاء إعـادة الـمـاولـة", Colors.red);
-                      }
-                    },
-                    child: const Text(
-                      "الـنـتـائـج",
-                      style: TextStyle(
-                          color: Colors.white, fontWeight: FontWeight.bold),
-                    )),
-              ),
-              Container(
-                width: MediaQuery.of(context).size.width / 2,
-                height: 80,
-                padding: const EdgeInsets.all(8.0),
-                child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(backgroundColor: appColor),
-                    onPressed: () async {
-                      try {
-                        var result = await ApiService.checkConn();
-                        if (result['status'] == "success") {
-                          Navigator.pushNamed(context, AddRemoveTeam.id);
-                        } else {
-                          massege("حـدث خـطـأ بـالإتـصـال", Colors.red);
-                        }
-                      } catch (e) {
-                        massege("الـرجـاء إعـادة الـمـاولـة", Colors.red);
-                      }
-                    },
-                    child: const Text(
-                      "اضـافـة/حـذف",
-                      style: TextStyle(
-                          color: Colors.white, fontWeight: FontWeight.bold),
-                    )),
-              ),
-              Container(
-                width: MediaQuery.of(context).size.width / 2,
-                height: 80,
-                padding: const EdgeInsets.all(8.0),
-                child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(backgroundColor: appColor),
-                    onPressed: () async {
-                      try {
-                        var result = await ApiService.checkConn();
-                        if (result['status'] == "success") {
-                          Navigator.pushNamed(context, EditTeamsPage.id);
-                        } else {
-                          massege("حـدث خـطـأ بـالإتـصـال", Colors.red);
-                        }
-                      } catch (e) {
-                        massege("الـرجـاء إعـادة الـمـاولـة", Colors.red);
-                      }
-                    },
-                    child: const Text(
-                      "تـعـديـل",
-                      style: TextStyle(
-                          color: Colors.white, fontWeight: FontWeight.bold),
-                    )),
-              ),
-              const Spacer(
-                flex: 1,
-              )
-            ],
-          ),
-        ));
-  }
+  bool shouldReclip(CustomClipper<Path> oldClipper) => false;
 }

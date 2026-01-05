@@ -7,7 +7,7 @@ plugins {
 
 android {
     namespace = "com.example.shababi_caffee"
-    compileSdk = flutter.compileSdkVersion
+    compileSdk = 34
     ndkVersion = flutter.ndkVersion
 
     compileOptions {

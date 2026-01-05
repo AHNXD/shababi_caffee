@@ -1,15 +1,18 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 
-var appColor = Colors.orange;
+var appColor = Colors.blue[300]!;
 
 AudioPlayer? player = AudioPlayer();
-Color toColor(String c) {
-  var hexString = c;
-  final buffer = StringBuffer();
-  if (hexString.length == 6 || hexString.length == 7) buffer.write('ff');
-  buffer.write(hexString.replaceFirst('#', ''));
-  return Color(int.parse(buffer.toString(), radix: 16));
+Color toColor(String? c) {
+  if (c == null || c.isEmpty) return Colors.grey; // Default if null
+  try {
+    String hex = c.replaceFirst('#', '');
+    if (hex.length == 6) hex = 'FF$hex'; // Add Alpha if missing
+    return Color(int.parse(hex, radix: 16));
+  } catch (e) {
+    return Colors.grey; // Default if parsing fails
+  }
 }
 
 int time = 45;

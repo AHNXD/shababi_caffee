@@ -39,13 +39,14 @@ dependencies:
   shared_preferences: ^2.2.2
   audioplayers: ^6.0.0
   sizer: ^2.0.15
-  qr_code_scanner: ^1.0.1
+  qr_code_scanner_plus: ^2.0.7
   flutter_launcher_icons: ^0.13.1
-  syncfusion_flutter_charts: ^21.2.4
+  syncfusion_flutter_charts: ^30.1.41
   flutter_colorpicker: ^1.0.3
   particles_flutter: ^1.0.0
   confetti: ^0.6.0
   flutter_svg: ^2.0.10+1
+  flutter_screenutil: ^5.9.3
 
 flutter_launcher_icons:
   android: "launcher_icon"
