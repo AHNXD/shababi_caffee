@@ -16,89 +16,109 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
-    // Determine screen width for responsive layout
-
     return Directionality(
-      textDirection: TextDirection.rtl, // Ensure RTL for Arabic
+      textDirection: TextDirection.rtl,
       child: Scaffold(
-        backgroundColor: Colors.grey[100],
-        resizeToAvoidBottomInset: false,
-
-        // Custom Transparent AppBar to show the background header
-        extendBodyBehindAppBar: true,
-        appBar: AppBar(
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-          actions: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              child: CircleAvatar(
-                backgroundColor: Colors.white.withOpacity(0.2),
-                child: IconButton(
-                  onPressed: () => Navigator.pushNamed(context, Settings.id),
-                  icon: const Icon(Icons.settings, color: Colors.white),
-                ),
-              ),
-            )
-          ],
-        ),
-
+        backgroundColor: Colors.grey[50], // Very light grey for contrast
         body: Column(
           children: [
-            // --- 1. Custom Curved Header with Logo ---
-            Expanded(
-              flex: 3,
-              child: Stack(
-                children: [
-                  ClipPath(
-                    clipper: HeaderClipper(),
-                    child: Container(
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                          colors: [
-                            appColor,
-                            const Color(0xFF1565C0), // Darker Blue
-                          ],
-                        ),
-                      ),
+            // --- 1. NEW HEADER STYLE: Floating Circle ---
+            Stack(
+              clipBehavior: Clip.none, // Allows the logo to hang off the bottom
+              alignment: Alignment.center,
+              children: [
+                // A. The Blue Background Banner
+                Container(
+                  height: 200,
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [
+                        appColor,
+                        const Color(0xFF1565C0),
+                      ],
+                    ),
+                    // Soft rounded corners at the bottom
+                    borderRadius: const BorderRadius.only(
+                      bottomLeft: Radius.circular(30),
+                      bottomRight: Radius.circular(30),
                     ),
                   ),
-                  Center(
+                ),
+
+                // B. The Top Bar (Title & Settings)
+                Positioned(
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  child: SafeArea(
                     child: Padding(
-                      padding: const EdgeInsets.only(bottom: 20.0),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 20, vertical: 10),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          const SizedBox(height: 30), // Spacing for AppBar
-                          Hero(
-                            tag: 'logo',
-                            child: Image.asset(
-                              "assets/images/logo_robo.png",
-                              height: 180,
-                              fit: BoxFit.contain,
-                              color: Colors.black,
+                          Container(
+                            decoration: BoxDecoration(
+                              color: Colors.white.withOpacity(0.2),
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: IconButton(
+                              onPressed: () =>
+                                  Navigator.pushNamed(context, Settings.id),
+                              icon: const Icon(Icons.settings,
+                                  color: Colors.white),
                             ),
                           ),
                         ],
                       ),
                     ),
                   ),
-                ],
-              ),
+                ),
+
+                // C. The Logo (Floating "Avatar" Style)
+                // Positioned so half is on blue, half on white
+                Positioned(
+                  bottom: -60,
+                  child: Container(
+                    height: 180,
+                    width: 180,
+                    padding: const EdgeInsets.all(30),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      shape: BoxShape.circle,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.1),
+                          blurRadius: 20,
+                          offset: const Offset(0, 10),
+                        ),
+                      ],
+                    ),
+                    child: Hero(
+                      tag: 'logo',
+                      child: Image.asset(
+                        "assets/icons/icon.png",
+                        fit: BoxFit.contain,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
+
+            // Add spacing to push content down below the floating logo
+            const SizedBox(height: 80),
 
             // --- 2. Menu Buttons Section ---
             Expanded(
-              flex: 4,
-              child: Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24.0),
                 child: Column(
                   children: [
-                    // A. Big "Results" Card
+                    // Results Button
                     _buildMenuCard(
                       context,
                       title: "الـنـتـائـج الـمـبـاشـرة",
@@ -111,7 +131,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
                     const SizedBox(height: 16),
 
-                    // B. Admin Tools Grid
+                    // Admin Tools Grid
                     Expanded(
                       child: Row(
                         children: [
@@ -130,7 +150,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             child: _buildMenuCard(
                               context,
                               title: "إدارة الـفـرق",
-                              icon: Icons.groups_2_rounded, // or group_add
+                              icon: Icons.groups_2_rounded,
                               color: Colors.green,
                               onClick: () => Navigator.pushNamed(
                                   context, AddRemoveTeam.id),
@@ -150,6 +170,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  // Same menu card logic as before
   Widget _buildMenuCard(
     BuildContext context, {
     required String title,
@@ -160,18 +181,16 @@ class _HomeScreenState extends State<HomeScreen> {
   }) {
     return Container(
       width: double.infinity,
-      height: isWide
-          ? 100
-          : double.infinity, // Fixed height for wide card, expand for grid
+      height: isWide ? 100 : double.infinity,
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.15),
-            spreadRadius: 2,
+            color: Colors.grey.withOpacity(0.1),
+            spreadRadius: 1,
             blurRadius: 10,
-            offset: const Offset(0, 5),
+            offset: const Offset(0, 4),
           ),
         ],
       ),
@@ -186,7 +205,6 @@ class _HomeScreenState extends State<HomeScreen> {
             padding: const EdgeInsets.all(16.0),
             child: isWide
                 ? Row(
-                    // Row layout for the wide card
                     children: [
                       Container(
                         padding: const EdgeInsets.all(12),
@@ -200,18 +218,17 @@ class _HomeScreenState extends State<HomeScreen> {
                       Text(
                         title,
                         style: const TextStyle(
-                          fontSize: 22,
+                          fontSize: 20, // Slightly smaller for balance
                           fontWeight: FontWeight.bold,
                           color: Colors.black87,
                         ),
                       ),
                       const Spacer(),
                       Icon(Icons.arrow_forward_ios_rounded,
-                          color: Colors.grey[400], size: 20),
+                          color: Colors.grey[400], size: 18),
                     ],
                   )
                 : Column(
-                    // Column layout for grid cards
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Container(
@@ -239,28 +256,4 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
-}
-
-// --- Custom Clipper for the curved header ---
-class HeaderClipper extends CustomClipper<Path> {
-  @override
-  Path getClip(Size size) {
-    Path path = Path();
-    path.lineTo(0, size.height - 50); // Start at bottom-left, slightly up
-
-    // Create a quadratic bezier curve
-    path.quadraticBezierTo(
-        size.width / 2, // Control point x (middle)
-        size.height, // Control point y (bottom)
-        size.width, // End point x (right)
-        size.height - 50 // End point y (slightly up)
-        );
-
-    path.lineTo(size.width, 0); // Line to top-right
-    path.close();
-    return path;
-  }
-
-  @override
-  bool shouldReclip(CustomClipper<Path> oldClipper) => false;
 }

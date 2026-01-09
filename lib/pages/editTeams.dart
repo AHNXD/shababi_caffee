@@ -14,7 +14,6 @@ class EditTeamsPage extends StatefulWidget {
 }
 
 class _EditTeamsPageState extends State<EditTeamsPage> {
-  // Method to refresh the list
   Future<void> _refreshData() async {
     setState(() {});
   }
@@ -24,7 +23,7 @@ class _EditTeamsPageState extends State<EditTeamsPage> {
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
-        backgroundColor: Colors.grey[50], // Soft background
+        backgroundColor: Colors.grey[50],
         appBar: AppBar(
           backgroundColor: appColor,
           elevation: 0,
@@ -44,7 +43,7 @@ class _EditTeamsPageState extends State<EditTeamsPage> {
         body: Container(
           decoration: const BoxDecoration(
             image: DecorationImage(
-              opacity: 0.1, // Subtler opacity for better readability
+              opacity: 0.05,
               image: AssetImage("assets/images/logo_robo.png"),
               fit: BoxFit.contain,
             ),
@@ -109,10 +108,10 @@ class _EditTeamsPageState extends State<EditTeamsPage> {
 }
 
 // -----------------------------------------------------------------------------
-// SEPARATE WIDGET FOR CLEANER CODE
+// UPDATED TEAM CARD (StatefulWidget)
 // -----------------------------------------------------------------------------
 
-class TeamControlCard extends StatelessWidget {
+class TeamControlCard extends StatefulWidget {
   final Map teamData;
   final VoidCallback onUpdate;
 
@@ -123,154 +122,289 @@ class TeamControlCard extends StatelessWidget {
   });
 
   @override
+  State<TeamControlCard> createState() => _TeamControlCardState();
+}
+
+class _TeamControlCardState extends State<TeamControlCard> {
+  // State to hold the slider value (1 to 25)
+  double _selectedValue = 5.0;
+
+  @override
   Widget build(BuildContext context) {
-    // Helper to get color safely
-    Color teamColor = toColor(teamData['color']);
-    String teamId = teamData['ID'].toString();
+    Color teamColor = toColor(widget.teamData['color']);
+    String teamId = widget.teamData['ID'].toString();
+    int currentPoints = int.tryParse(widget.teamData['points'].toString()) ?? 0;
 
     return Card(
-      elevation: 4,
+      elevation: 3,
       shadowColor: Colors.black12,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.r)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24.r)),
       child: Container(
+        padding: EdgeInsets.all(20.w),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20.r),
-          border: Border(
-              right: BorderSide(
-                  color: teamColor, width: 6.w)), // Colored accent strip
           color: Colors.white,
+          borderRadius: BorderRadius.circular(24.r),
+          border: Border.all(color: Colors.grey.shade100, width: 1),
         ),
-        padding: EdgeInsets.all(16.w),
         child: Column(
           children: [
-            // --- Header: Name and Current Score ---
+            // --- 1. Header: Name & Score ---
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      teamData['name'],
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 22.sp,
-                        color: Colors.black87,
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        widget.teamData['name'],
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontWeight: FontWeight.w800,
+                          fontSize: 20.sp,
+                          color: Colors.black87,
+                        ),
                       ),
-                    ),
-                    Text(
-                      "الفريق رقم ${teamData['ID']}",
-                      style: TextStyle(fontSize: 14.sp, color: Colors.grey),
-                    ),
-                  ],
+                      SizedBox(height: 4.h),
+                      Container(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 8.w, vertical: 2.h),
+                        decoration: BoxDecoration(
+                          color: teamColor.withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(8.r),
+                        ),
+                        child: Text(
+                          "فريق ${widget.teamData['ID']}",
+                          style: TextStyle(
+                              fontSize: 12.sp,
+                              color: teamColor,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
                 Container(
                   padding:
-                      EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+                      EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
                   decoration: BoxDecoration(
-                    color: teamColor.withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(30.r),
+                    color: Colors.grey.shade50,
+                    border: Border.all(color: Colors.grey.shade200),
+                    borderRadius: BorderRadius.circular(16.r),
                   ),
-                  child: Text(
-                    "${teamData['points']} ⭐️",
-                    style: TextStyle(
-                      fontSize: 20.sp,
-                      fontWeight: FontWeight.w900,
-                      color: teamColor, // Text matches team color
-                    ),
+                  child: Column(
+                    children: [
+                      Text(
+                        "$currentPoints",
+                        style: TextStyle(
+                          fontSize: 24.sp,
+                          fontWeight: FontWeight.w900,
+                          color: teamColor,
+                          height: 1.0,
+                        ),
+                      ),
+                      Text("نقطة",
+                          style:
+                              TextStyle(fontSize: 10.sp, color: Colors.grey)),
+                    ],
                   ),
                 ),
               ],
             ),
 
-            Divider(height: 24.h, thickness: 1),
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 20.h),
+              child: Divider(height: 1, color: Colors.grey.shade200),
+            ),
 
-            // --- Action Buttons (Add) ---
-            _buildActionRow(context, teamId, 'add', Colors.green, "إضافة نقاط"),
+            // --- 2. The Value Selector (Slider) ---
+            Column(
+              children: [
+                // Label showing selected value
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text("قيمة التغيير:",
+                        style: TextStyle(
+                            fontSize: 14.sp, color: Colors.grey.shade600)),
+                    SizedBox(width: 8.w),
+                    Text(
+                      "${_selectedValue.toInt()}",
+                      style: TextStyle(
+                        fontSize: 26.sp,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black87,
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 10.h),
 
-            SizedBox(height: 12.h),
+                // Slider Row with Buttons
+                Row(
+                  children: [
+                    // Minus Button (Fine tune)
+                    _buildCircleBtn(Icons.remove, () {
+                      setState(() {
+                        if (_selectedValue > 1) _selectedValue--;
+                      });
+                    }),
 
-            // --- Action Buttons (Subtract) ---
-            _buildActionRow(context, teamId, 'sub', Colors.red, "خصم نقاط"),
+                    // The Slider
+                    Expanded(
+                      child: SliderTheme(
+                        data: SliderTheme.of(context).copyWith(
+                          activeTrackColor: teamColor,
+                          inactiveTrackColor: teamColor.withOpacity(0.15),
+                          thumbColor: teamColor,
+                          overlayColor: teamColor.withOpacity(0.1),
+                          trackHeight: 6.h,
+                          thumbShape:
+                              RoundSliderThumbShape(enabledThumbRadius: 10.r),
+                        ),
+                        child: Slider(
+                          value: _selectedValue,
+                          min: 1,
+                          max: 25,
+                          divisions: 24, // Snaps to integers
+                          label: _selectedValue.toInt().toString(),
+                          onChanged: (double value) {
+                            setState(() {
+                              _selectedValue = value;
+                            });
+                          },
+                        ),
+                      ),
+                    ),
+
+                    // Plus Button (Fine tune)
+                    _buildCircleBtn(Icons.add, () {
+                      setState(() {
+                        if (_selectedValue < 25) _selectedValue++;
+                      });
+                    }),
+                  ],
+                ),
+              ],
+            ),
+
+            SizedBox(height: 24.h),
+
+            // --- 3. Action Buttons (Add / Remove) ---
+            Row(
+              children: [
+                // REMOVE BUTTON (Red)
+                Expanded(
+                  child: _buildActionButton(
+                    context,
+                    label: "خصم",
+                    value: _selectedValue.toInt(),
+                    color: Colors.red.shade400,
+                    icon: Icons.remove_circle_outline,
+                    onTap: () => _handlePointsUpdate(
+                        context, teamId, 'sub', _selectedValue.toInt()),
+                  ),
+                ),
+
+                SizedBox(width: 16.w),
+
+                // ADD BUTTON (Green)
+                Expanded(
+                  child: _buildActionButton(
+                    context,
+                    label: "إضافة",
+                    value: _selectedValue.toInt(),
+                    color: Colors.green,
+                    icon: Icons.add_circle_outline,
+                    isFilled: true,
+                    onTap: () => _handlePointsUpdate(
+                        context, teamId, 'add', _selectedValue.toInt()),
+                  ),
+                ),
+              ],
+            ),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildActionRow(BuildContext context, String teamId, String type,
-      Color color, String label) {
-    final List<int> values = [5, 10, 15, 20];
-    bool isAdd = type == 'add';
+  // --- Helper Methods ---
 
-    return Row(
-      children: [
-        // Label Icon
-        Container(
-          width: 32.w,
-          height: 32.w,
-          decoration: BoxDecoration(
-              color: color.withOpacity(0.1), shape: BoxShape.circle),
-          child:
-              Icon(isAdd ? Icons.add : Icons.remove, color: color, size: 20.sp),
+  Widget _buildCircleBtn(IconData icon, VoidCallback onTap) {
+    return Material(
+      color: Colors.grey.shade100,
+      borderRadius: BorderRadius.circular(30),
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(30),
+        child: Container(
+          width: 36.w,
+          height: 36.w,
+          alignment: Alignment.center,
+          child: Icon(icon, color: Colors.grey.shade700, size: 20.sp),
         ),
-        SizedBox(width: 10.w),
-
-        // Buttons
-        Expanded(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: values.map((val) {
-              return InkWell(
-                onTap: () async {
-                  // Show loading or optimistic update could go here
-                  await ApiService.editTeam(teamId, val, type);
-
-                  // Optional: Show feedback
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    content: Text(
-                      isAdd
-                          ? "تم إضافة $val نقاط لـ ${teamData['name']}"
-                          : "تم خصم $val نقاط من ${teamData['name']}",
-                      textAlign: TextAlign.center,
-                    ),
-                    backgroundColor: color,
-                    duration: const Duration(milliseconds: 700),
-                    behavior: SnackBarBehavior.floating,
-                  ));
-
-                  onUpdate(); // Refresh parent
-                },
-                borderRadius: BorderRadius.circular(10.r),
-                child: Container(
-                  width: 55.w,
-                  height: 35.h,
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(10.r),
-                      border:
-                          Border.all(color: color.withOpacity(0.3), width: 1.5),
-                      boxShadow: [
-                        BoxShadow(
-                            color: color.withOpacity(0.05),
-                            blurRadius: 4,
-                            offset: const Offset(0, 2))
-                      ]),
-                  child: Text(
-                    "$val",
-                    style: TextStyle(
-                      fontSize: 16.sp,
-                      fontWeight: FontWeight.bold,
-                      color: color,
-                    ),
-                  ),
-                ),
-              );
-            }).toList(),
-          ),
-        ),
-      ],
+      ),
     );
+  }
+
+  Widget _buildActionButton(BuildContext context,
+      {required String label,
+      required int value,
+      required Color color,
+      required IconData icon,
+      required VoidCallback onTap,
+      bool isFilled = false}) {
+    return ElevatedButton(
+      onPressed: onTap,
+      style: ElevatedButton.styleFrom(
+        backgroundColor: isFilled ? color : Colors.white,
+        foregroundColor: isFilled ? Colors.white : color,
+        elevation: isFilled ? 4 : 0,
+        padding: EdgeInsets.symmetric(vertical: 12.h),
+        side: isFilled ? null : BorderSide(color: color, width: 1.5),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12.r),
+        ),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(icon, size: 20.sp),
+          SizedBox(width: 8.w),
+          Text(
+            "$label $value", // "Add 5" or "Remove 5"
+            style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _handlePointsUpdate(
+      BuildContext context, String teamId, String type, int value) async {
+    // 1. Call API
+    await ApiService.editTeam(teamId, value, type);
+
+    // 2. Refresh UI (Parent)
+    widget.onUpdate();
+
+    // 3. Show Feedback
+    bool isAdd = type == 'add';
+    if (!mounted) return;
+
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text(
+        isAdd ? "تم إضافة $value نقاط بنجاح" : "تم خصم $value نقاط بنجاح",
+        textAlign: TextAlign.center,
+        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.sp),
+      ),
+      backgroundColor: isAdd ? Colors.green : Colors.red.shade400,
+      duration: const Duration(milliseconds: 800),
+      behavior: SnackBarBehavior.floating,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      margin: EdgeInsets.all(20.w),
+    ));
   }
 }
